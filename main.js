@@ -22,7 +22,7 @@ io.on("disconnect", socket => {
 
 })
 
-http.listen(3000, function () {
+http.listen(process.env.PORT, function () {
     load_propmts();
     console.log('listening on *:3000');
 });
