@@ -21,7 +21,7 @@ io.on('connection', socket => {
 io.on("disconnect", socket => {
 
 })
-let port = process.env.PORT | 3000;
+let port = process.env.PORT;
 http.listen(port, function () {
     load_propmts();
     console.log('listening on *:'+port);
