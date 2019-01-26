@@ -35,7 +35,7 @@ let memes = [];
 let VOTE_LIKE = "like";
 let VOTE_ANGRY = "angry";
 let VOTE_HEART = "heart";
-let VOTE_TIME = 7;
+let VOTE_TIME = 15;
 let PROMPT_TIME = 90;
 let SCORE_TIME = 3;
 
