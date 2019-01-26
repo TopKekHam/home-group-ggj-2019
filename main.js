@@ -21,10 +21,10 @@ io.on('connection', socket => {
 io.on("disconnect", socket => {
 
 })
-
-http.listen(process.env.PORT, function () {
+let port = process.env.PORT | 3000;
+http.listen(port, function () {
     load_propmts();
-    console.log('listening on *:3000');
+    console.log('listening on *:'+port);
 });
 
 let rooms = [];
@@ -37,7 +37,7 @@ let VOTE_ANGRY = "angry";
 let VOTE_HEART = "heart";
 let VOTE_TIME = 7;
 let PROMPT_TIME = 90;
-let SCORE_TIME = 40000;
+let SCORE_TIME = 3;
 
 let last_server_to_user_emit = [];
 

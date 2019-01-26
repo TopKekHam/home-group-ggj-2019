@@ -267,11 +267,18 @@ document.on("DOMContentLoaded", e => {
   }
 
   function load_sounds() {
-
+    sounds.bg = new Audio("/sounds/bg.wav");
+    sounds.game_start = new Audio("/sounds/start_game.wav");
+    //sounds.vote = new Audio("/sounds/vote.wav");
+    //sounds.player_connected = 
+    //sounds.player_disconnected = new Audio("/sounds/player_disconnected.wav");
   }
 
   async function load_host(roomNumber) {
     load_sounds();
+
+    sounds.bg.play();
+    sounds.bg.loop = true;
 
     let hostHTML = await fetch("/host.html").then(data => data.text())
     document.body.innerHTML = hostHTML;
@@ -282,12 +289,14 @@ document.on("DOMContentLoaded", e => {
     })
 
     socket.on("user-connected", data => {
+      new Audio("/sounds/player_connected.wav").play();
       let text_message = `<b>${data.username}</b> connected to the room.`;
       let elm_message = host_create_user_lobby_label(text_message);
       select("#users").appendChild(elm_message);
     })
 
     socket.on("user-disconnected", data => {
+      new Audio("/sounds/player_disconnected.wav").play();
       let text_message = `<b>${data.username}</b> disconnected from the room.`;
       let elm_message = host_create_user_lobby_label(text_message);
       select("#users").appendChild(elm_message);
@@ -298,6 +307,8 @@ document.on("DOMContentLoaded", e => {
     })
 
     socket.on("start-game", data => {
+      sounds.bg.pause();
+      sounds.game_start.play();
       select("#lobby").setAttribute("hidden", true);
       select("#game").removeAttribute("hidden");
     })
@@ -328,10 +339,12 @@ document.on("DOMContentLoaded", e => {
     })
 
     socket.on("player-vote", vote => {
+      new Audio("/sounds/vote.wav").play();
       host_update_vote_field(vote.vote_type);
     })
 
     socket.on("show-score", data => {
+      new Audio("/sounds/score.wav").play();
       host_clear_screen();
       data.scores.forEach(score => {
         let elm_score = host_create_user_score(score);
