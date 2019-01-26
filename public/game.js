@@ -271,6 +271,8 @@ document.on("DOMContentLoaded", e => {
 
   function load_sounds() {
     sounds.bg = new Audio("/sounds/bg.wav");
+    //sounds.bg_prompt = new Audio("/sounds/bg_prompt.wav");
+    //sounds.bg_prompt.loop = true;
     sounds.game_start = new Audio("/sounds/start_game.wav");
     //sounds.vote = new Audio("/sounds/vote.wav");
     //sounds.player_connected = 
@@ -343,7 +345,6 @@ document.on("DOMContentLoaded", e => {
 
     socket.on("start-vote", vote => {
       host_clear_screen();
-
       let elm_username = document.createElement("h1");
       elm_username.innerHTML = vote.username;
       select("#game").appendChild(elm_username);

@@ -205,6 +205,7 @@ async function start_room(room) {
     await room_start_vote(room);
     await room_show_score(room);
     await room_show_winners(room);
+    
 }
 
 function room_show_winners(room) {
