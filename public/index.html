@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Home-Group</title>
+  <script src="./socket.io.slim.js"></script>
+  <script src="./dom.js"></script>
+  <script src="./game.js"></script>
+  <link rel="stylesheet" href="./game.css">
+</head>
+<body>
+  <div class="login-bar">
+    <div class="login-group-icon"></div>
+    <h1 class="login-logo">Home Group</h1>
+  </div>
+  <div id="login">
+      <button class="login-input login-btn login-width-btn" id="host_btn" >Host</button>
+      <br>
+      <p class="row-login text-center">Username</p>
+      <input class="login-input login-width-text pc-center" id="username-field" type="text" placeholder="username">
+      <p class="row-login text-center">Room Number</p>
+      <input class="login-input login-width-text pc-center" id="room-field" type="text" placeholder="room number">
+      <button class="login-input login-btn login-width-btn" id="connect_btn">Connect</button>
+  </div>
+</body>
+</html>
