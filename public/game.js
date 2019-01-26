@@ -44,7 +44,6 @@ document.on("DOMContentLoaded", e => {
 
     socket.on("prompt", data => {
       user_clear_screen();
-      console.log(data);
       show_prompt_meme(data.prompt, "#prompt-container", "input");
     });
 
@@ -191,8 +190,12 @@ document.on("DOMContentLoaded", e => {
     let elm_game_timer = document.createElement("h1");
     elm_game_timer.id = "game_timer";
 
+    let elm_players_done = document.createElement("div");
+    elm_players_done.id="players-done";
+
     container.appendChild(elm_game_instruction);
     container.appendChild(elm_game_timer);
+    container.appendChild(elm_players_done);
   }
 
 
@@ -274,6 +277,14 @@ document.on("DOMContentLoaded", e => {
     //sounds.player_disconnected = new Audio("/sounds/player_disconnected.wav");
   }
 
+  function create_elm_player_done(username) {
+    let div = document.createElement("div");
+    div.classList.add("player-score");
+    let p = create_and_append(div, "p");
+    p.innerHTML = username;
+    return div;
+  }
+
   async function load_host(roomNumber) {
     load_sounds();
 
@@ -316,12 +327,18 @@ document.on("DOMContentLoaded", e => {
     socket.on("prompt", prompt => {
       host_clear_screen();
       host_create_prompt(select("#game"));
-      select("#game_instruction").innerHTML = "<p>Look at your phone you have a meme</p><p>Fill the text field with your dankest ideas!</p>"
+      select("#game_instruction").innerHTML = "<p>Look at your phone you have a meme</p><p>Fill the text field with your dankest ideas!</p>";  
     })
 
     socket.on("prompt-timer-tick", timer => {
       let current_time = timer.current_time;
       select("#game_timer").innerHTML = `${Math.floor(current_time / 60)} : ${current_time % 60}`;
+    })
+
+    socket.on("player_prompt_answer", data => {
+      new Audio("/sounds/player_submit_meme.wav").play();
+      let elm_player = create_elm_player_done(data.username);
+      select("#players-done").appendChild(elm_player);
     })
 
     socket.on("start-vote", vote => {
@@ -353,6 +370,7 @@ document.on("DOMContentLoaded", e => {
     })
 
     socket.on("show-winners", data => {
+      new Audio("/sounds/end_game.wav").play();
       host_clear_screen();
 
       let container = document.createElement("div");

@@ -119,7 +119,7 @@ function socket_user_connection(socket, data) {
                 connected: true
             };
             room.players.push(player);
-            init_player(player);
+            init_player(player, room);
         } else {
             socket.emit("player-not-found");
             return;
@@ -162,12 +162,13 @@ function disconnect_player(room, username) {
     }
 }
 
-function init_player(player) {
+function init_player(player, room) {
     player.prompt_answers = [];
     player.prompt_assignments = [];
     player.prompt_ratings = [];
 
     player.socket.on("prompt_answer", answer => {
+        room.host.emit("player_prompt_answer", {username:player.username});
         player.prompt_answers[room.prompt_number] = answer;
     })
 
@@ -190,17 +191,17 @@ async function start_room(room) {
     room.prompt_number = 0;
     room.current_player_prompt = -1;
 
-    await start_prompt(room);
+    await room_start_prompt(room);
     await room_start_vote(room);
     await room_show_score(room);
     
     room.prompt_number++;
-    await start_prompt(room);
+    await room_start_prompt(room);
     await room_start_vote(room);
     await room_show_score(room);
     
     room.prompt_number++;
-    await start_prompt(room, true);
+    await room_start_prompt(room, true);
     await room_start_vote(room);
     await room_show_score(room);
     await room_show_winners(room);
@@ -328,7 +329,7 @@ function start_vote(room, player_idx) {
     })
 }
 
-function start_prompt(room, not_random) {
+function room_start_prompt(room, not_random) {
     return new Promise((res, rej) => {
         let prompt = get_random_propmt();
         room.players.forEach((player, idx) => {
@@ -356,7 +357,9 @@ function start_prompt(room, not_random) {
 
             if (prompt_got_all_answers(room)) {
                 clearInterval(meme_timer.interval);
-                res()
+                create_timer(2,()=>{}, ()=> {
+                    res()
+                })
             }
         }, () => {
             room.host.emit("prompt-timer-tick", {

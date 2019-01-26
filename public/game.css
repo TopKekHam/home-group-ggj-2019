@@ -118,6 +118,12 @@ body {
     margin-top: 2rem;
 }
 
+#players-done {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+}
+
 @media only screen and (min-width: 601px) {
 
   .pc-center {
