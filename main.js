@@ -35,7 +35,7 @@ let memes = [];
 let VOTE_LIKE = "like";
 let VOTE_ANGRY = "angry";
 let VOTE_HEART = "heart";
-let VOTE_TIME = 15;
+let VOTE_TIME = 12;
 let PROMPT_TIME = 150;
 let SCORE_TIME = 3;
 
@@ -49,6 +49,8 @@ function load_propmts() {
                 encoding: 'utf-8'
             }, function (err, data) {
                 memes = JSON.parse(data);
+                
+                console.log(`${memes.length} templates loaded.`);
             });
         } else {
             console.log(err);
@@ -440,12 +442,15 @@ function get_random_propmts(amount) {
 
 
     for (let i = 0; i < amount; i++) {
-        let rnd_number = genNumber(amount);
+        let rnd_number = genNumber(memes.length);
         
         while(numbers.filter(n => rnd_number === n).length > 0)
         {
-            rnd_number = genNumber(amount);
+            rnd_number = genNumber(memes.length);
         }
+
+        console.log(rnd_number);
+        
 
         numbers.push(rnd_number);
         prompts.push(memes[rnd_number]);

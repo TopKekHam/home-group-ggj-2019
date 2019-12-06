@@ -24,7 +24,7 @@
  {"imgSrc":"./memes/meme23.png", "text_fields" : [{"x":"25%","y":"75%"}]},
  {"imgSrc":"./memes/meme24.png", "text_fields" : [{"x":"25%","y":"75%"}]},
  {"imgSrc":"./memes/meme25.png", "text_fields" : [{"x":"25%","y":"75%"}]},
- {"imgSrc":"./memes/meme26.png", "text_fields" : [{"x":"25%","y":"45%"}, {"x":"75%","y":"45%"}]},
+ {"imgSrc":"./memes/meme26.jpg", "text_fields" : [{"x":"25%","y":"45%"}, {"x":"75%","y":"45%"}]},
  {"imgSrc":"./memes/meme27.jpeg", "text_fields" : [{"x":"50%","y":"25%"}, {"x":"40%","y":"60%"}]},
  {"imgSrc":"./memes/meme28.jpg", "text_fields" : [{"x":"50%","y":"10%"}]},
  {"imgSrc":"./memes/meme29.png", "text_fields" : [{"x":"50%","y":"85%"}]},
