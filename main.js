@@ -62,7 +62,7 @@ function create_game() {
     return game = {
         players: [],
         min_players: 2,
-        max_players: 8,
+        max_players: 16,
         started: false
     }
 }
