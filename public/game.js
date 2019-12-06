@@ -123,7 +123,8 @@ document.on("DOMContentLoaded", e => {
 
       if (field_type === "input") {
         elm_text_field.classList.add("text-field-red")
-        elm_text_field.value = "meme here";
+        elm_text_field.width = "100px";
+        elm_text_field.placeholder = "meme here";
         elm_text_field.addEventListener("input", e => {
           e.target.style.left = `calc(${e.target.def_x} - ${e.target.value.length * pad}px)`;
           e.target.style.width = 24 + (e.target.value.length * pad * 2) + "px";

@@ -21,7 +21,7 @@ io.on('connection', socket => {
 io.on("disconnect", socket => {
 
 })
-let port = process.env.PORT;
+let port = process.env.PORT || 3000;
 http.listen(port, function () {
     load_propmts();
     console.log('listening on *:'+port);
@@ -36,7 +36,7 @@ let VOTE_LIKE = "like";
 let VOTE_ANGRY = "angry";
 let VOTE_HEART = "heart";
 let VOTE_TIME = 15;
-let PROMPT_TIME = 90;
+let PROMPT_TIME = 10;
 let SCORE_TIME = 3;
 
 let last_server_to_user_emit = [];
@@ -217,7 +217,6 @@ function room_show_winners(room) {
         heart: highest_heart,
         angry: highest_angry
     };
-    console.log(data);
     room.host.emit("show-winners", data)
 }
 
@@ -281,15 +280,20 @@ function room_start_vote(room) {
     return new Promise(async (res, rej) => {
 
         for (let idx = 0; idx < room.players.length; idx++) {
+            
             room.current_player_prompt = idx;
             let player = room.players[idx];
-            room.host.emit("start-vote", {
-                username: player.username,
-                prompt: player.prompt_assignments[room.prompt_number],
-                promp_answer: player.prompt_answers[room.prompt_number]
-            })
 
-            await start_vote(room, idx);
+            if(player.prompt_answers[room.prompt_number] !== undefined)
+            {
+                room.host.emit("start-vote", {
+                    username: player.username,
+                    prompt: player.prompt_assignments[room.prompt_number],
+                    promp_answer: player.prompt_answers[room.prompt_number]
+                })
+                
+                await start_vote(room, idx);
+            }
         }
         res();
     })
@@ -301,6 +305,7 @@ function start_vote(room, player_idx) {
         room.players[player_idx].prompt_ratings[room.prompt_number][VOTE_ANGRY] = 0;
         room.players[player_idx].prompt_ratings[room.prompt_number][VOTE_HEART] = 0;
         room.players[player_idx].prompt_ratings[room.prompt_number][VOTE_LIKE] = 0;
+
         room.players.forEach((player, idx) => {
             if (idx != player_idx) {
                 player.socket.emit("start-vote");
@@ -332,11 +337,12 @@ function start_vote(room, player_idx) {
 
 function room_start_prompt(room, not_random) {
     return new Promise((res, rej) => {
-        let prompt = get_random_propmt();
+        let promptsToSend = get_random_propmts(room.players.length);
+
         room.players.forEach((player, idx) => {
             if(not_random === false || not_random === undefined)
             {
-                prompt = get_random_propmt();
+                prompt = promptsToSend[idx];
             }
 
             player.socket.emit("prompt", {
@@ -368,8 +374,9 @@ function room_start_prompt(room, not_random) {
             });
             room.host.emit("end-of-prompt");
             emit_players(room, "end-of-prompt");
-
+            res();
         })
+
         room.host.emit("prompt-timer-tick", {
             current_time: meme_timer.time
         });
@@ -422,8 +429,27 @@ function create_timer(time, on_tick, on_end) {
     return timer;
 }
 
-function get_random_propmt() {
-    let rnd_number = Math.floor(Math.random() * memes.length);
-    let meme = memes[rnd_number];
-    return meme;
+function genNumber (num) {
+   return Math.floor(Math.random() * num);
+}
+
+function get_random_propmts(amount) {
+
+    let numbers = [];
+    let prompts = [];
+
+
+    for (let i = 0; i < amount; i++) {
+        let rnd_number = genNumber(amount);
+        
+        while(numbers.filter(n => rnd_number === n).length > 0)
+        {
+            rnd_number = genNumber(amount);
+        }
+
+        numbers.push(rnd_number);
+        prompts.push(memes[rnd_number]);
+    }
+
+    return prompts;
 }
