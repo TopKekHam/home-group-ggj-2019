@@ -36,7 +36,7 @@ let VOTE_LIKE = "like";
 let VOTE_ANGRY = "angry";
 let VOTE_HEART = "heart";
 let VOTE_TIME = 15;
-let PROMPT_TIME = 10;
+let PROMPT_TIME = 150;
 let SCORE_TIME = 3;
 
 let last_server_to_user_emit = [];
